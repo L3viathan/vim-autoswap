@@ -138,7 +138,7 @@ function! AS_DetectActiveWindow_Tmux (swapname)
 	" * Linux: `pts/1`, `/dev/pts/1`
 	" * FreeBSD: `1`, `/dev/vc/1`
 	" * Darwin/macOS: `s001`, `/dev/ttys001`
-	let window = systemlist('tmux list-panes -aF "#{pane_tty} #{window_index} #{pane_index}" | grep -F "'.tty[0].' " 2>/dev/null')
+	let window = systemlist('tmux list-panes -aF "#{pane_tty} #{session_name} #{window_index} #{pane_index}" | grep -F "'.tty[0].' " 2>/dev/null')
 	if (len(window) == 0)
 		return ''
 	endif
@@ -177,7 +177,7 @@ endfunction
 " TMUX: Switch function for Tmux
 function! AS_SwitchToActiveWindow_Tmux (active_window)
 	let pane_info = split(a:active_window)
-	call system('tmux select-window -t '.pane_info[1].'; tmux select-pane -t '.pane_info[2])
+	call system('tmux switch-client -t '.pane_info[1].'; tmux select-window -t '.pane_info[2].'; tmux select-pane -t '.pane_info[3])
 endfunction
 
 " LINUX: Switch function for Linux, uses wmctrl
